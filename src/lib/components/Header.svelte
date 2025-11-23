@@ -1,5 +1,16 @@
 <script>
-  import { Building2 } from 'lucide-svelte';
+  import { Building2, Menu, X } from 'lucide-svelte';
+  import Navigation from './Navigation.svelte';
+  
+  let mobileMenuOpen = false;
+  
+  function toggleMenu() {
+    mobileMenuOpen = !mobileMenuOpen;
+  }
+  
+  function closeMenu() {
+    mobileMenuOpen = false;
+  }
 </script>
 
 <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
@@ -16,10 +27,33 @@
         </div>
       </a>
 
-      <!-- Placeholder for navigation (coming in next feature) -->
-      <div class="text-gray-600 text-sm">
-        Navigation Coming Soon
+      <!-- Desktop Navigation -->
+      <div class="hidden md:block">
+        <Navigation />
       </div>
+
+      <!-- Mobile Menu Button -->
+      <button 
+        class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
+        on:click={toggleMenu}
+        aria-label="Toggle menu"
+        aria-expanded={mobileMenuOpen}
+      >
+        {#if mobileMenuOpen}
+          <X class="w-6 h-6 text-gray-700" />
+        {:else}
+          <Menu class="w-6 h-6 text-gray-700" />
+        {/if}
+      </button>
     </div>
   </div>
+
+  <!-- Mobile Navigation Menu -->
+  {#if mobileMenuOpen}
+    <div class="md:hidden border-t border-gray-200 bg-white pb-4">
+      <div class="px-4 pt-2">
+        <Navigation mobile={true} on:navigate={closeMenu} />
+      </div>
+    </div>
+  {/if}
 </header>
